@@ -8,6 +8,7 @@
 - Kimi：新增环境变量 `KIMI_MODEL_THINKING_KEEP`，将其值原样作为 `thinking.keep` 字段发送给 Moonshot API，用于启用 Preserved Thinking（例如 `export KIMI_MODEL_THINKING_KEEP=all` 可让模型在多轮之间保留历史 `reasoning_content`）；仅对支持 Preserved Thinking 的 Moonshot 模型（如 `kimi-k2.6` / `kimi-k2-thinking`）生效，未设置或空字符串时请求体不携带该字段、等同当前默认行为，且仅在当前模型真正处于 Thinking 模式时才注入，以避免 API 收到只有 `thinking.keep` 而缺少 `thinking.type` 的无效请求体。注意 `keep=all` 会因为重新发送历史推理内容而显著增加输入 token 与 API 费用
 - Kosong：修复 `Kimi.with_extra_body` 在后续调用新增其它 `thinking.*` 字段时静默丢掉已有 `thinking.type` 的问题——`thinking` 子对象现在按字段合并，而不是被整体浅覆盖，使得 `with_thinking(...)` 与 `with_extra_body({"thinking": {...}})` 组合使用时两次设置的字段都能保留
 - Shell：修复审批请求反馈文本输入的光标渲染问题——光标块现在根据实际光标位置正确渲染，不再始终固定在行尾；当光标位于文本中间时，光标所在字符会以反色显示（模拟终端原生块光标效果）
+- Shell：在提示框状态栏显示当前正在运行的后台 Agent 任务数——原有的 `⚙ bash: N` 徽章只统计后台 Shell 任务，把后台 Agent 子代理过滤掉了，所以多个子代理同时在跑时提示框看起来像空闲，用户无法判断工作是否还在进行；现在状态栏会渲染 `⚙ bash: N` 与 `⚙ agent: N` 两个相互独立的徽章（任一计数为 0 时自动隐藏），终端太窄无法同时容纳两者时优先丢弃 agent 徽章
 
 ## 1.38.0 (2026-04-22)
 
